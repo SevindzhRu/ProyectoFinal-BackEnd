@@ -4,9 +4,22 @@
     "start:dev": "nodemon src/App.js",
     "start": "node src/App.js"
   },
-
   "dependencies": {
     "express": "^4.18.2",
     "nodemon": "^2.0.22"
-  }
+  },
+  "name": "proyectofinal",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SevindzhRu/ProyectoFinal-BackEnd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SevindzhRu/ProyectoFinal-BackEnd/issues"
+  },
+  "homepage": "https://github.com/SevindzhRu/ProyectoFinal-BackEnd#readme",
+  "description": ""
 }
