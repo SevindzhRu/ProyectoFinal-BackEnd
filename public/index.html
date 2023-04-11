@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend</title>
+</head>
+
+<body>
+    <h1>API carrito</h1>
+    <h3>Para realizar consultas a la API de productos se debe realizar:</h3>
+    <p>Ruta: localhost:8050/api/products</p>
+    <p>la misma utiliza los metodos GET, POST, PUT y DELETE</p>
+    <P>realizando solo GET trae todos los productos, con localhost:8050/api/products/(n) siendo n el numero de id, trae
+        solo ese producto</P>
+    <P>PUT con localhost:8050/api/products/(n) siendo n el numero de id, se modicifa el producto elegido</P>
+    <P>DELETE con localhost:8050/api/products/(n) siendo n el numero de id, elimina solo ese producto</P>
+    </br>
+    <h3>Para realizar consultas a la API de carrito se debe realizar:</h3>
+    <p>Ruta: localhost:8050/api/carts</p>
+    <p>la misma utiliza los metodos GET, POST y DELETE</p>
+    <P>realizando solo GET trae todos los carritos, con localhost:8050/api/carts/(n) siendo n el numero de id, trae solo
+        ese carrito</P>
+    <P>realizando solo POST trae genera un nuevo carrito</P>
+    <P>realizando POST con localhost:8050/api/carts/(n)/product/(pd) siendo n el numero de id de carrito y pd el id de
+        producto que se va a cargar</P>
+    <P>DELETE con localhost:8050/api/carts/(n) siendo n el numero de id, elimina solo ese carrito</P>
+</body>
+
+</html>
