@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon src/App.js",
-    "start": "node src/Apps.js"
+    "start": "node src/App.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7",
+    "mongoose": "^7.1.0",
     "nodemon": "^2.0.22",
     "socket.io": "^4.6.1"
   }
