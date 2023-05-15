@@ -5,7 +5,6 @@ const objetconfig = require('./config/objetconfig.js')
 // Import de los routes de la api
 const productsRouter = require ('./routes/products.router')
 const cartRouter = require ('./routes/cartManager.router')
-const userRouter = require('./routes/users.router')
 const viewStatic = require ('./routes/views.router')
 
 // Import de Server
@@ -20,17 +19,18 @@ console.log(__dirname+'/views');
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname+'/views')
 app.set('view engine', 'handlebars')
+
 app.use('/', viewStatic)
-app.use('/realtimeproducts', viewStatic)
+// app.use('/realtimeproducts', viewStatic)
 
 objetconfig.connectDB()
 
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.json());
 
 //con _dirname tenemos la ruta absoluta
-app.use(express.static(__dirname +'/public'))
+// app.use(express.static(__dirname +'/public'))
 
 const httpServer = app.listen(PORT, ()=>{
     console.log(`Escuchando el puerto: ${PORT}`)
@@ -44,26 +44,26 @@ app.use('/api/products', productsRouter)
 app.use('/api/carts', cartRouter)
 
 // http://localhost:8050/api/usuarios
-app.use('/api/usuarios',  userRouter)
+// app.use('/api/usuarios',  userRouter)
 
 // socketProducts(io)
 
 //__________________CHAT__________________________
-let messages = []
+// let messages = []
 
-io.on('connection', socket => {
-    console.log('Nuevo cliente conectado')
-    socket.on('message', data => {
-        // console.log(data)
-        messages.push(data)
-        io.emit('messageLogs', messages)
-    })
+// io.on('connection', socket => {
+//     console.log('Nuevo cliente conectado')
+//     socket.on('message', data => {
+//         // console.log(data)
+//         messages.push(data)
+//         io.emit('messageLogs', messages)
+//     })
 
-    socket.on('authenticated', data => {
-        socket.broadcast.emit('newUserConnected', data)
-    })
+//     socket.on('authenticated', data => {
+//         socket.broadcast.emit('newUserConnected', data)
+//     })
 
-})
+// })
 
 
 

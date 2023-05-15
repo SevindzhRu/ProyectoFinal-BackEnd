@@ -45,14 +45,12 @@ router.post('/', async(req, res) => {
 
 })
 
-//PUT
-router.put('/:cid/product/:pid', async(req, res) =>{
+router.post('/:cid/product/:pid', async(req, res) =>{
     try{
         const cid = req.params.cid
         const pid = req.params.pid
-        let product = await productManager.getProductById(pid)
-        //console.log(product)
-        if (product !== null) {
+        let cart = await cartManager.getCartstById(cid)
+        if (cart !== null) {
             let result = await cartManager.updateCart(cid, pid)
             res.status(200).send({
                 status: 'success',
@@ -60,8 +58,27 @@ router.put('/:cid/product/:pid', async(req, res) =>{
         }else{
             res.status(400).send({
                 status: 'Error',
-                payload: "El producto no existe"})
+                payload: "El carrito no existe"})
         }
+    } catch(error) {
+        return new Error(error)
+    }
+})
+
+
+//PUT
+router.put('/:cid/product/:pid', async(req, res) =>{
+    try{
+        const { cid, pid } = req.params
+        const quantity = req.body
+        console.log(quantity)
+        let cart = await cartManager.getCartstById(cid)
+        if (cart !== null) {
+            let result = await cartManager.updateCartProduct(cid, pid, quantity)
+            res.status(200).send({
+                status: 'success',
+                payload: result})
+            }
     } catch(error) {
         return new Error(error)
     }
@@ -69,6 +86,20 @@ router.put('/:cid/product/:pid', async(req, res) =>{
 
 //------------------------------------------------
 //DELETE
+router.delete('/:cid/product/:pid', async(req, res) =>{
+    try {   
+        const cid = req.params.cid
+        const pid = req.params.pid
+        await cartManager.deleteCartByID(cid, pid)
+        res.send({
+            status: 'success',
+            payload: `Producto id: ${pid} fue eliminado del carrito: ${cid}`
+        })
+    } catch (error) {
+        return new Error(error)
+    }
+})
+
 router.delete('/:cid', async(req, res) =>{
     try {   
         const { cid } = req.params
@@ -81,4 +112,6 @@ router.delete('/:cid', async(req, res) =>{
         return new Error(error)
     }
 })
+
+
 module.exports = router

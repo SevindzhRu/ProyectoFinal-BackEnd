@@ -1,13 +1,17 @@
-const {Schema, model} = require ('mongoose')
+const {Schema, model, mongoose} = require ('mongoose')
 const collection = 'carts'
 
 const cartSchema = new Schema({
 	status: String,
     products: [{
-			id: Schema.ObjectId,
-			quantity: Number
-	}]
+		productID: { 	
+			type: Schema.Types.ObjectId,
+			ref: 'products'
+		},
+quantity: Number
+       }]
 })
+
 
 const cartModel = model(collection, cartSchema)
 

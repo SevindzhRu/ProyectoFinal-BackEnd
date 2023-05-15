@@ -21,7 +21,7 @@ class CartManagerMongo {
 
     async addCart(){
         try {
-            return await cartModel.create({status: 'ok'})
+            return await cartModel.create({status: 'ok', products: []})
         } catch (error) {
             return new Error(error)
         }
@@ -29,20 +29,31 @@ class CartManagerMongo {
 
     async updateCart(cid, pid){
         try {
-            let value = await cartModel.find({_id: cid, "products.id": pid},{"products.quantity":1, _id:0})
-            console.log(`Valor del producto buscado: ${value}`)
-            if (value !== null) {
-                let newvalue = {...value} + 1
-                console.log(`Cantidad nueva: ${newvalue}`)
-                return await cartModel.findOneAndUpdate({_id: cid, "products.id": pid}, {$inc: {"products.$.quantity": 1}})
+            const cart = await cartModel.findOne({_id: cid, "products.productID": pid})
+            //console.log(`carrito: ${cart}`)
+            if (cart !== null) {
+                return await cartModel.updateOne({_id: cid, "products.productID": pid}, {$inc: { "products.$.quantity": 1}})          
             }else{
-                return await cartModel.updateOne({_id: cid}, {$push: { products:[{id: pid, quantity: 1}]}})
+                return await cartModel.updateOne({_id: cid}, {$push: { products: {productID: pid, quantity: 1}}})
             }
         } catch (error) {
             return new Error(error)
         }
     }
 
+    //updateCartProduct
+    async updateCartProduct(cid, pid, quantity){
+        try {
+            const cart = await cartModel.findOne({_id: cid, "products.productID": pid})
+            //console.log(`carrito: ${cart} Cantidad nueva: ${quantity}`)
+            if (cart !== null) {
+                //return await cartModel.findOneAndUpdate({_id: cid, "products.productID": pid}, {$push: { "products.$.quantity": quantity}},{upsert: true})
+                return await cartModel.findAndUpdate({_id: cid, "products.productID": pid}, {$set: { "products.$.quantity": quantity}})
+            }
+        } catch (error) {
+            return new Error(error)
+        }
+    }
 
     async deleteCart(cid){
         try {
@@ -51,6 +62,17 @@ class CartManagerMongo {
             return new Error(error)
         }
     }
+
+    async deleteCartByID(cid, pid){
+        try {
+            return await cartModel.findOneAndUpdate({_id: cid}, {$pull: {products: {productID: pid}}},{new: true} )
+        } catch (error) {
+            return new Error(error)
+        }
+    }
+
 }
+
+
 
 module.exports = new CartManagerMongo
