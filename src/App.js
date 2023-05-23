@@ -20,7 +20,7 @@ const PORT = 8050
 
 app.use(session({
     store: create({
-        mongoUrl: 'mongodb+srv://poito69:6vym87VKIRKCYrtK@cluster0.apxquxb.mongodb.net/ecommerce?retryWrites=true&w=majority',
+        mongoUrl: 'mongodb+srv://sevi:sevi123@cluster0.5n1uhbl.mongodb.net/ecommerce?retryWrites=true&w=majority',
         mongoOptions: {
             useNewUrlParser: true,
             useUnifiedTopology: true
