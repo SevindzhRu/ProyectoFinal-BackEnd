@@ -45,10 +45,10 @@ class CartManagerMongo {
     async updateCartProduct(cid, pid, quantity){
         try {
             const cart = await cartModel.findOne({_id: cid, "products.productID": pid})
-            //console.log(`carrito: ${cart} Cantidad nueva: ${quantity}`)
+            console.log(`carrito: ${cart} Cantidad nueva: ${quantity}`)
             if (cart !== null) {
                 //return await cartModel.findOneAndUpdate({_id: cid, "products.productID": pid}, {$push: { "products.$.quantity": quantity}},{upsert: true})
-                return await cartModel.findAndUpdate({_id: cid, "products.productID": pid}, {$set: { "products.$.quantity": quantity}})
+                return await cartModel.findOneAndUpdate({_id: cid, "products.productID": pid}, {$inc: {"products.$.quantity": quantity}})
             }
         } catch (error) {
             return new Error(error)

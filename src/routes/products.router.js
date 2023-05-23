@@ -1,11 +1,24 @@
 const {Router} = require('express')
 const router = Router()
 const productManager = require('../dao/product.mongo.js')
+const { productModel } = require('../dao/models/products.model')
+
 
 //GET
 router.get('/', async(req, res) => {
     try {
-        const products = await productManager.getProducts()
+        let page = parseInt(req.query.page)
+        let limit = parseInt(req.query.limit)
+        let sort = req.query.sort
+        let sortType = {}
+        if(!page) page = 1
+        if(!limit) limit = 5
+        if(sort === 'asc'){
+            sortType = {price: 1}
+        } else if (sort === 'desc'){
+            sortType = {price: -1}
+        }
+        const products =  await productModel.paginate({},{page,limit,sort, lean:true})
         res.status(200).send({
             status: 'success',
             payload: products
@@ -28,7 +41,6 @@ router.get('/:pid', async(req, res) => {
     }
 })
 
-//------------------------------------------------
 //POST
 router.post('/', async(req, res) => {
     try {
@@ -44,7 +56,6 @@ router.post('/', async(req, res) => {
 
 })
 
-//------------------------------------------------
 //PUT
 router.put('/:pid', async(req, res) =>{
     try{
@@ -59,7 +70,6 @@ router.put('/:pid', async(req, res) =>{
     }
 })
 
-//------------------------------------------------
 //DELETE
 router.delete('/:pid', async(req, res) =>{
     try {   
