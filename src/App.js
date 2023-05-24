@@ -53,7 +53,7 @@ app.use(express.urlencoded({ extended: true }));
 const httpServer = app.listen(PORT, ()=>{
     console.log(`Escuchando el puerto: ${PORT}`)
 })
-const io = new Server(httpServer)
+// const io = new Server(httpServer)
 
 // http://localhost:8050/api/products
 app.use('/api/products', productsRouter)
