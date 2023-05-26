@@ -19,42 +19,66 @@ router.get('/privada', auth,(req,res) => {
     res.send('Esta sección solo puede ver un admin logueado')
 })
 
-router.post('/register'), async(req, res)=>{
-    const {first_name, last_name, email, password} = req.body
-    if (first_name == null || last_name == null || email == null || password == null) return res.send('los campos estan vacios')
-    const existUser = await userModel.findOne({email})
-    if (existUser) res.send ({status: 'error', message:'El mail ya esta registrado'})
-    const newUser = {
-        first_name,
-        last_name,
-        email,
-        password
+router.post('/register', async(req, res)=>{
+    const {firstName, lastName, userName, email, password} = req.body
+
+    if (firstName == "" || lastName == "" || userName == "" || email == "" || password == ""){
+        return res.status(404).send({message:"complete los campos que faltan"})
     }
-    let result = await userModel.create(newUser)
-    res.status(200).send({status: 'success', message: 'Usuario creado', result})
-}   
+
+    const userEmail = await userModel.findOne({email})
+    if (userEmail) {
+        return res.status(404).send({status: "error", message: "El email ya existe"})
+     }
+
+      const uName = await userModel.findOne({userName})
+      if (uName) {
+        return res.status(404).send({status: "error", message: "El usuario ya existe"})
+
+    const newUser = {
+        firstName, lastName, userName, email, password
+    }
+
+    await userModel.create(newUser)
+
+    res.status(200).send({ message: `El usuario ${firstName} ${lastName} se ha creado con exito`})
+    
+}
+})
+
 
 router.post('/login', async(req, res)=> {
     const {email, password} = req.body
-    /*if (email!=='adminCoder@coder.com' || password!== 'adminCod3r123') {
-        return res.send('login failed')
-    }*/
-    const existUser = await userModel.findOne({email, password})
-    if(!existUser) return res.send({status: 'error', message: 'El mail no se encuentra registrado'})
-    
-    req.session.user = {first_name: existUser.first_name,
-                        email: existUser.email}
 
-    //req.session.admin = true
+    const userDB = await userModel.findOne({email})
+    const userPassword = await userModel.findOne({userPassword})
 
-    let page = 1
-    let sort = "asc"
-    let result = await productModel.paginate({},{page,sort, lean:true})
-    result.prevLink = result.hasPrevPage?`http://localhost:8050/api/sessions/products?page=${result.prevPage}`:'';
-    result.nextLink = result.hasNextPage?`http://localhost:8050/api/sessions/products?page=${result.nextPage}`:'';
-    result.isValid= !(page<=0||page>result.totalPages)
-    res.render('products',result)
-})
+    if(!userDB) return res.status(404).send({status: "error", message: "Este email no existe"})
+    if(!userPassword) return res.status(404).send({status: "error", password: "Password invalido"})
+
+    let role = "user"
+
+    if(email == "adminCoder@Coder.com" && password == "adminCoder123") role = "admin"
+
+    req.session.user = {
+        firstName: userDB.firstName,
+        lastName: userDB.lastName,
+        userName: userDB.userName,
+        email: userDB.email,
+        role: role
+    }
+    console.log(req.session.user)
+
+    res.redirect("/api/productos")
+    })
+
+    // let page = 1
+    // let sort = "asc"
+    // let result = await productModel.paginate({},{page,sort, lean:true})
+    // result.prevLink = result.hasPrevPage?`http://localhost:8050/api/sessions/products?page=${result.prevPage}`:'';
+    // result.nextLink = result.hasNextPage?`http://localhost:8050/api/sessions/products?page=${result.nextPage}`:'';
+    // result.isValid= !(page<=0||page>result.totalPages)
+    // res.render('products',result)
 
 
 router.get('/logout', (req, res)=>{

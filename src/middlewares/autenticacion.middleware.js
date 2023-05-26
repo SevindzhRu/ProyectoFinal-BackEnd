@@ -1,4 +1,4 @@
-export function auth(req, res, next) {
+function auth(req, res, next) {
     if (req.session.logged) {
         next()
     } else {
@@ -6,10 +6,15 @@ export function auth(req, res, next) {
     }
 }
 
-export function isLogged(req,res,next){
+function isLogged(req,res,next){
     if(req.session.logged){
         res.redirect('/views/products')
     } else{
         next()
     }
+}
+
+module.exports = {
+    auth,
+    isLogged
 }
