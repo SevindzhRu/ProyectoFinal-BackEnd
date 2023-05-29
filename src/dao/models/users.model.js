@@ -4,12 +4,12 @@ const collection = 'usuarios'
 const userSchema = new Schema({
     first_name: {
         type: String,
+        index: true,
         required: true
     },
     last_name: {
         type: String,
-        required: true,
-        index: true
+        required: true
     },
     email: {
         type: String,

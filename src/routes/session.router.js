@@ -20,9 +20,9 @@ router.get('/privada', auth,(req,res) => {
 })
 
 router.post('/register', async(req, res)=>{
-    const {first_name, last_name, userName, email, password} = req.body
+    const {first_name, last_name, email, password} = req.body
 
-    if (first_name == "" || last_name == "" || userName == "" || email == "" || password == ""){
+    if (first_name == "" || last_name == "" || email == "" || password == ""){
         return res.status(404).send({message:"complete los campos que faltan"})
     }
 
@@ -31,13 +31,8 @@ router.post('/register', async(req, res)=>{
         return res.status(404).send({status: "error", message: "El email ya existe"})
      }
 
-      const uName = await userModel.findOne({userName})
-      if (uName) {
-        return res.status(404).send({status: "error", message: "El usuario ya existe"})
-        }
-
     const newUser = {
-        first_name, last_name, userName, email, password
+        first_name, last_name, email, password
     }
 
     await userModel.create(newUser)
@@ -56,21 +51,31 @@ router.post('/login', async(req, res)=> {
     if(!userDB) return res.status(404).send({status: "error", message: "Este email no existe"})
     if(!userPassword) return res.status(404).send({status: "error", password: "Password invalido"})
 
-    let role = "user"
+    // let role = "user"
 
     // if(email === "adminCoder@Coder.com" && password === "adminCoder123") role = "admin"
 
     req.session.user = {
         firstName: userDB.first_name,
         lastName: userDB.last_name,
-        userName: userDB.userName,
         email: userDB.email,
         role: role
     }
+
+    if (email === "adminCoder@coder.com" && password === "adminCodre123") {
+        req.session.user.role = "admin";
+    } else {
+        req.session.user.role = "user";
+    }
+
     console.log(req.session.user)
 
     res.redirect("/api/products")
     })
+
+
+
+
 
     // let page = 1
     // let sort = "asc"
