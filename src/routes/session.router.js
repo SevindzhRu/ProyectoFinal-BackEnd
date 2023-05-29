@@ -20,9 +20,9 @@ router.get('/privada', auth,(req,res) => {
 })
 
 router.post('/register', async(req, res)=>{
-    const {firstName, lastName, userName, email, password} = req.body
+    const {first_name, last_name, userName, email, password} = req.body
 
-    if (firstName == "" || lastName == "" || userName == "" || email == "" || password == ""){
+    if (first_name == "" || last_name == "" || userName == "" || email == "" || password == ""){
         return res.status(404).send({message:"complete los campos que faltan"})
     }
 
@@ -34,16 +34,16 @@ router.post('/register', async(req, res)=>{
       const uName = await userModel.findOne({userName})
       if (uName) {
         return res.status(404).send({status: "error", message: "El usuario ya existe"})
+        }
 
     const newUser = {
-        firstName, lastName, userName, email, password
+        first_name, last_name, userName, email, password
     }
 
     await userModel.create(newUser)
 
-    res.status(200).send({ message: `El usuario ${firstName} ${lastName} se ha creado con exito`})
+    res.status(200).send({ message: `El usuario ${first_name} ${last_name} se ha creado con exito`})
     
-}
 })
 
 
@@ -51,25 +51,25 @@ router.post('/login', async(req, res)=> {
     const {email, password} = req.body
 
     const userDB = await userModel.findOne({email})
-    const userPassword = await userModel.findOne({userPassword})
+    const userPassword = await userModel.findOne({password})
 
     if(!userDB) return res.status(404).send({status: "error", message: "Este email no existe"})
     if(!userPassword) return res.status(404).send({status: "error", password: "Password invalido"})
 
     let role = "user"
 
-    if(email == "adminCoder@Coder.com" && password == "adminCoder123") role = "admin"
+    // if(email === "adminCoder@Coder.com" && password === "adminCoder123") role = "admin"
 
     req.session.user = {
-        firstName: userDB.firstName,
-        lastName: userDB.lastName,
+        firstName: userDB.first_name,
+        lastName: userDB.last_name,
         userName: userDB.userName,
         email: userDB.email,
         role: role
     }
     console.log(req.session.user)
 
-    res.redirect("/api/productos")
+    res.redirect("/api/products")
     })
 
     // let page = 1

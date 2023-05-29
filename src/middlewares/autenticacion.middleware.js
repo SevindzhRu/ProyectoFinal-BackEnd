@@ -1,20 +1,10 @@
-function auth(req, res, next) {
-    if (req.session.logged) {
-        next()
-    } else {
-        res.redirect('/')
+function auth(req,res,next){
+    if(req.session?.user?.email !== 'adminCoder@coder.com' || !req.session?.user?.admin === 'admin'){
+        return res.status(401).send('error de autenticacion')
     }
+    next()
 }
-
-function isLogged(req,res,next){
-    if(req.session.logged){
-        res.redirect('/views/products')
-    } else{
-        next()
-    }
-}
-
 module.exports = {
-    auth,
-    isLogged
+    auth
 }
+
