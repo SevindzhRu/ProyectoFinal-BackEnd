@@ -59,10 +59,10 @@ router.post('/login', async(req, res)=> {
         firstName: userDB.first_name,
         lastName: userDB.last_name,
         email: userDB.email,
-        role: role
+        role: userDB.role
     }
 
-    if (email === "adminCoder@coder.com" && password === "adminCodre123") {
+    if (email === "adminCoder@coder.com" && password === "adminCoder123") {
         req.session.user.role = "admin";
     } else {
         req.session.user.role = "user";
